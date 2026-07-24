@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KeuanganKu — Masuk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-wrap">
+  <!-- Sisi kiri: hero -->
+  <div class="auth-hero">
+    <div class="hero-mark">Buku Kas Digital</div>
+    <h1 class="hero-title">Catat setiap rupiah, kuasai setiap keputusan.</h1>
+    <p class="hero-sub">KeuanganKu membantu kamu mencatat pemasukan, pengeluaran, dan anggaran bulanan — semua tersimpan aman di Supabase.</p>
+
+    <div class="ledger-stamp">
+      <div class="stat">
+        <b>100%</b>
+        <span>Privat &amp; per akun</span>
+      </div>
+      <div class="stat">
+        <b>Real-time</b>
+        <span>Sinkron ke database</span>
+      </div>
+      <div class="stat">
+        <b>Rp 0</b>
+        <span>Biaya tersembunyi</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sisi kanan: form -->
+  <div class="auth-panel">
+    <div class="auth-card">
+
+      <div id="loginView">
+        <h2>Masuk</h2>
+        <p class="lead">Lanjutkan mengelola keuanganmu.</p>
+
+        <div id="loginMsg" class="auth-msg"></div>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="nama@email.com" required>
+          </div>
+          <div class="field">
+            <label for="loginPassword">Kata sandi</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-primary" id="loginBtn">Masuk</button>
+        </form>
+
+        <p class="auth-switch">Belum punya akun? <a href="#" id="showRegister">Daftar sekarang</a></p>
+      </div>
+
+      <div id="registerView" style="display:none;">
+        <h2>Buat akun</h2>
+        <p class="lead">Mulai catat keuanganmu dalam 1 menit.</p>
+
+        <div id="registerMsg" class="auth-msg"></div>
+
+        <form id="registerForm">
+          <div class="field">
+            <label for="registerName">Nama</label>
+            <input type="text" id="registerName" placeholder="Nama kamu" required>
+          </div>
+          <div class="field">
+            <label for="registerEmail">Email</label>
+            <input type="email" id="registerEmail" placeholder="nama@email.com" required>
+          </div>
+          <div class="field">
+            <label for="registerPassword">Kata sandi</label>
+            <input type="password" id="registerPassword" placeholder="Minimal 6 karakter" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-primary" id="registerBtn">Daftar</button>
+        </form>
+
+        <p class="auth-switch">Sudah punya akun? <a href="#" id="showLogin">Masuk di sini</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

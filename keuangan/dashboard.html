@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KeuanganKu — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand"><span class="dot"></span> KeuanganKu</div>
+  <div class="header-right">
+    <span class="user-email" id="userEmail">memuat...</span>
+    <button class="btn btn-ghost" id="logoutBtn">Keluar</button>
+  </div>
+</header>
+
+<main class="app-main">
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="overview">Ringkasan</button>
+    <button class="tab-btn" data-tab="transactions">Transaksi</button>
+    <button class="tab-btn" data-tab="categories">Kategori</button>
+    <button class="tab-btn" data-tab="budgets">Anggaran</button>
+  </div>
+
+  <!-- ============ TAB: RINGKASAN ============ -->
+  <section class="tab-panel active" id="tab-overview">
+
+    <div class="summary-grid">
+      <div class="summary-card balance">
+        <div class="label">Saldo bulan ini</div>
+        <div class="value mono" id="sumBalance">Rp 0</div>
+      </div>
+      <div class="summary-card income">
+        <div class="label">Pemasukan</div>
+        <div class="value mono" id="sumIncome">Rp 0</div>
+      </div>
+      <div class="summary-card expense">
+        <div class="label">Pengeluaran</div>
+        <div class="value mono" id="sumExpense">Rp 0</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Grafik bulan ini</h3>
+        <input type="month" id="overviewMonth">
+      </div>
+      <div class="charts-grid">
+        <div class="chart-box"><canvas id="pieChart"></canvas></div>
+        <div class="chart-box"><canvas id="barChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Transaksi terbaru</h3></div>
+      <div id="recentList"></div>
+    </div>
+
+  </section>
+
+  <!-- ============ TAB: TRANSAKSI ============ -->
+  <section class="tab-panel" id="tab-transactions">
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Semua transaksi</h3>
+        <button class="btn btn-primary" id="openAddTx" style="width:auto;">+ Tambah transaksi</button>
+      </div>
+
+      <div class="filter-bar">
+        <select id="filterType">
+          <option value="">Semua jenis</option>
+          <option value="income">Pemasukan</option>
+          <option value="expense">Pengeluaran</option>
+        </select>
+        <select id="filterCategory">
+          <option value="">Semua kategori</option>
+        </select>
+        <input type="month" id="filterMonth">
+      </div>
+
+      <div id="txTableWrap"></div>
+    </div>
+
+  </section>
+
+  <!-- ============ TAB: KATEGORI ============ -->
+  <section class="tab-panel" id="tab-categories">
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Kategori</h3>
+        <button class="btn btn-primary" id="openAddCategory" style="width:auto;">+ Tambah kategori</button>
+      </div>
+      <div class="chip-list" id="categoryList"></div>
+    </div>
+
+  </section>
+
+  <!-- ============ TAB: ANGGARAN ============ -->
+  <section class="tab-panel" id="tab-budgets">
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Anggaran bulanan</h3>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <input type="month" id="budgetMonth">
+          <button class="btn btn-primary" id="openAddBudget" style="width:auto;">+ Tambah anggaran</button>
+        </div>
+      </div>
+      <div id="budgetList"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<!-- ============ MODAL: TRANSAKSI ============ -->
+<div class="modal-overlay" id="modalTx">
+  <div class="modal-box">
+    <h3 id="txModalTitle">Tambah transaksi</h3>
+    <form id="txForm">
+      <input type="hidden" id="txId">
+      <div class="field">
+        <label>Jenis</label>
+        <select id="txType" required>
+          <option value="expense">Pengeluaran</option>
+          <option value="income">Pemasukan</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label>Jumlah (Rp)</label>
+          <input type="number" id="txAmount" min="1" step="1" required>
+        </div>
+        <div class="field">
+          <label>Tanggal</label>
+          <input type="date" id="txDate" required>
+        </div>
+      </div>
+      <div class="field">
+        <label>Kategori</label>
+        <select id="txCategory"></select>
+      </div>
+      <div class="field">
+        <label>Catatan</label>
+        <input type="text" id="txDescription" placeholder="Contoh: Makan siang">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelTx">Batal</button>
+        <button type="submit" class="btn btn-primary" style="width:auto;">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ MODAL: KATEGORI ============ -->
+<div class="modal-overlay" id="modalCategory">
+  <div class="modal-box">
+    <h3>Tambah kategori</h3>
+    <form id="categoryForm">
+      <div class="field">
+        <label>Nama kategori</label>
+        <input type="text" id="catName" placeholder="Contoh: Transportasi" required>
+      </div>
+      <div class="field">
+        <label>Jenis</label>
+        <select id="catType" required>
+          <option value="expense">Pengeluaran</option>
+          <option value="income">Pemasukan</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Warna</label>
+        <input type="color" id="catColor" value="#c9a24b" style="width:100%; height:40px; padding:4px;">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelCategory">Batal</button>
+        <button type="submit" class="btn btn-primary" style="width:auto;">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ MODAL: ANGGARAN ============ -->
+<div class="modal-overlay" id="modalBudget">
+  <div class="modal-box">
+    <h3>Tambah anggaran</h3>
+    <form id="budgetForm">
+      <div class="field">
+        <label>Kategori (pengeluaran)</label>
+        <select id="budgetCategory" required></select>
+      </div>
+      <div class="field">
+        <label>Batas anggaran (Rp)</label>
+        <input type="number" id="budgetAmount" min="1" step="1" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelBudget">Batal</button>
+        <button type="submit" class="btn btn-primary" style="width:auto;">Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
